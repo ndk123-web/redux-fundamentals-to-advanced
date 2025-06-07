@@ -15,6 +15,7 @@ const todoSlice = createSlice({
         title,
         completed
       });
+      console.log("Payload Type: ",action.type);
       return state
     },
     removeTodo: (state, action) => {

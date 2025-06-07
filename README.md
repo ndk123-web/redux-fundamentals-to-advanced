@@ -1,5 +1,12 @@
 # Redux Toolkit Guide - Complete Understanding
 
+## steps : 
+
+1. `dispatch(reducerMethod(...))`
+2. `That method returns: { type: "sliceName/methodName", payload: data }`
+3. `dispatch sends this { type, payload } to all reducers in the store`
+4. `Only the matching reducer handles it, others ignore it`
+
 ## 📚 Overview
 We use **2 main libraries**:
 - `react-redux` - Connects React components to Redux store
