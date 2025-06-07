@@ -10,6 +10,7 @@ function App() {
 
   // here state means store.js -> store.reducer = {}
   const todos = useSelector((state) => {
+    console.log("All Reducers: ",state)
     return state.todos
   })
 
