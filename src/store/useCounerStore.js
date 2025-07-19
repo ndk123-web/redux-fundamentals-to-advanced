@@ -1,18 +1,36 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import CryptoJS from "crypto-js";
+
+const secret = "asdamakfnaknfa"; // Should be stored securely, not hardcoded ideally
 
 const useCountStore = create(
-  persist((set) => ({
-    count: 0,
-    increament: () => set((state) => ({ count: state.count + 1 })),
-    decreament: () => set((state) => ({count: state.count-1}))     
-  }),
+  persist(
+    (set, get) => ({
+      // Store encrypted value initially
+      count: CryptoJS.AES.encrypt("0", secret).toString(),
 
-  {
-    name: "count",
-    getStorage: () => localStorage
-  }
-)
+      // Increment logic
+      increament: () => {
+        const decrypted = CryptoJS.AES.decrypt(get().count, secret).toString(CryptoJS.enc.Utf8);
+        const newCount = parseInt(decrypted) + 1;
+        const encrypted = CryptoJS.AES.encrypt(newCount.toString(), secret).toString();
+        set({ count: encrypted });
+      },
+
+      // Decrement logic
+      decreament: () => {
+        const decrypted = CryptoJS.AES.decrypt(get().count, secret).toString(CryptoJS.enc.Utf8);
+        const newCount = parseInt(decrypted) - 1;
+        const encrypted = CryptoJS.AES.encrypt(newCount.toString(), secret).toString();
+        set({ count: encrypted });
+      },
+    }),
+    {
+      name: "count",
+      getStorage: () => localStorage,
+    }
+  )
 );
 
-export { useCountStore }
+export { useCountStore };
